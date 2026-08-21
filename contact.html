@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — Valoura Home</title>
+<meta name="description" content="Neem contact op met Valoura Home voor vragen over producten, bestellingen of styling-advies.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="contact">
+<div id="header-mount"></div>
+<main>
+  <section class="page-hero">
+    <div class="wrap">
+      <div class="lockup bronze">Contact</div>
+      <h1 class="display-l" style="margin-top:20px">We denken graag mee</h1>
+      <p>Vragen over een product, uw bestelling of styling-advies? Stuur ons een bericht.</p>
+    </div>
+  </section>
+  <section>
+    <div class="wrap">
+      <div class="contact-grid">
+        <div class="contact-info reveal">
+          <div class="block"><h4>E-mail</h4><p>service@valourahome.nl</p></div>
+          <div class="block"><h4>Telefoon</h4><p>085 &ndash; 123 45 67<br><span style="font-size:13px;color:var(--taupe)">ma t/m vr, 9:00 &ndash; 17:00</span></p></div>
+          <div class="block"><h4>Studio</h4><p>Valoura Home<br>Keizersgracht 128<br>1015 CW Amsterdam</p></div>
+          <div class="block"><h4>Reactietijd</h4><p>Wij reageren binnen &eacute;&eacute;n werkdag.</p></div>
+        </div>
+        <form class="styled reveal" id="contactForm">
+          <div class="field-row">
+            <div class="field"><label for="cName">Naam</label><input id="cName" type="text" required></div>
+            <div class="field"><label for="cMail">E-mail</label><input id="cMail" type="email" required></div>
+          </div>
+          <div class="field"><label for="cSub">Onderwerp</label>
+            <select id="cSub"><option>Vraag over een product</option><option>Mijn bestelling</option><option>Retourneren</option><option>Samenwerken</option><option>Anders</option></select>
+          </div>
+          <div class="field"><label for="cMsg">Bericht</label><textarea id="cMsg" required></textarea></div>
+          <button class="btn solid" type="submit" style="align-self:flex-start">Verstuur bericht</button>
+          <div class="form-ok" id="contactOk">Dank u wel &mdash; uw bericht is verzonden. We nemen snel contact op.</div>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+<div id="footer-mount"></div>
+<script src="assets/data.js"></script>
+<script src="assets/partials.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  byId('contactForm').addEventListener('submit', e=>{
+    e.preventDefault();
+    byId('contactForm').querySelectorAll('input,textarea,select,button.btn').forEach(el=>el.disabled=true);
+    byId('contactOk').style.display='block';
+  });
+</script>
+</body>
+</html>

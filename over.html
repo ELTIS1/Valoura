@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Over Valoura — The Art of Living</title>
+<meta name="description" content="Het verhaal achter Valoura Home: tijdloos design, eerlijke materialen en zorgvuldige service.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="over">
+<div id="header-mount"></div>
+<main>
+  <section class="page-hero">
+    <div class="wrap">
+      <div class="lockup bronze">Ons verhaal</div>
+      <h1 class="display-l" style="margin-top:20px">The art of living.</h1>
+      <p>Valoura begon met een eenvoudige overtuiging: een huis wordt een thuis door de details.</p>
+    </div>
+  </section>
+  <section>
+    <div class="wrap">
+      <div class="about-grid">
+        <div class="about-visual reveal" id="aboutArt"></div>
+        <div class="reveal">
+          <div class="lockup left">Sinds 2021</div>
+          <h2 class="display-m" style="margin:20px 0">Rust als uitgangspunt</h2>
+          <p style="color:var(--ink-soft)">Wij selecteren interieuraccessoires die niet schreeuwen om aandacht, maar die een ruimte dragen. Natuurlijke materialen, zachte tinten en vormen die over tien jaar nog net zo kloppen als vandaag.</p>
+          <p style="color:var(--ink-soft);margin-top:16px">Elke collectie wordt in kleine oplages samengesteld met Europese makers en ateliers. Zo houden we de kwaliteit hoog en de voetafdruk klein.</p>
+        </div>
+      </div>
+      <div class="value-grid">
+        <div class="value-card reveal"><span class="num">I.</span><h3>Tijdloos design</h3><p>Geen trends die volgend seizoen gedateerd zijn, maar vormen en tinten die blijven.</p></div>
+        <div class="value-card reveal"><span class="num">II.</span><h3>Eerlijke materialen</h3><p>Keramiek, linnen, glas en metaal &mdash; gekozen op gevoel, gewicht en duurzaamheid.</p></div>
+        <div class="value-card reveal"><span class="num">III.</span><h3>Zorgvuldige service</h3><p>Snel geleverd, mooi verpakt en 30 dagen bedenktijd. Vragen? We denken graag mee.</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+<div id="footer-mount"></div>
+<script src="assets/data.js"></script>
+<script src="assets/partials.js"></script>
+<script src="assets/app.js"></script>
+<script>byId('aboutArt').innerHTML = art('vaas-duo'); observeReveals();</script>
+</body>
+</html>

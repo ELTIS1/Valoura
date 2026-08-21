@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shop — Valoura Home</title>
+<meta name="description" content="Ontdek alle interieuraccessoires van Valoura Home: lampen, spiegels, vazen, kaarsen en wanddecoratie.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="shop">
+<div id="header-mount"></div>
+<main>
+  <section class="page-hero">
+    <div class="wrap">
+      <div class="lockup bronze">Collectie</div>
+      <h1 class="display-l" style="margin-top:20px">Alle producten</h1>
+      <p>Zorgvuldig samengesteld. Rustig van kleur, rijk van materiaal.</p>
+    </div>
+  </section>
+  <section>
+    <div class="wrap">
+      <div class="shop-tools">
+        <div class="chip-row" id="chipRow"></div>
+        <div class="sort-wrap">
+          <div class="shop-search">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
+            <input type="text" id="shopSearch" placeholder="Zoeken in collectie" aria-label="Zoeken in collectie">
+          </div>
+          <select id="sortSel" aria-label="Sorteren">
+            <option value="pop">Populair</option>
+            <option value="lo">Prijs: laag &ndash; hoog</option>
+            <option value="hi">Prijs: hoog &ndash; laag</option>
+            <option value="az">Naam A &ndash; Z</option>
+          </select>
+        </div>
+      </div>
+      <div class="prod-grid" id="shopGrid"></div>
+      <div class="empty-state" id="shopEmpty" style="display:none"><div class="serif">Geen resultaten</div><p>Probeer een andere zoekterm of categorie.</p></div>
+    </div>
+  </section>
+</main>
+<div id="footer-mount"></div>
+<script src="assets/data.js"></script>
+<script src="assets/partials.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  const params = new URLSearchParams(location.search);
+  let currentCat = params.get('cat') || 'Alles';
+  if(!['Alles',...CATS.map(c=>c.name)].includes(currentCat)) currentCat='Alles';
+  function renderChips(){
+    const cats = ['Alles', ...CATS.map(c=>c.name)];
+    byId('chipRow').innerHTML = cats.map(c=>`<button class="chip ${c===currentCat?'active':''}" data-chip="${c}">${c}</button>`).join('');
+  }
+  function renderShop(){
+    const q = byId('shopSearch').value.trim().toLowerCase();
+    const sort = byId('sortSel').value;
+    let list = PRODUCTS.filter(p => currentCat==='Alles' || p.cat===currentCat);
+    if(q) list = list.filter(p => (p.name+' '+p.cat+' '+p.desc).toLowerCase().includes(q));
+    if(sort==='lo') list.sort((a,b)=>a.price-b.price);
+    else if(sort==='hi') list.sort((a,b)=>b.price-a.price);
+    else if(sort==='az') list.sort((a,b)=>a.name.localeCompare(b.name,'nl'));
+    else list.sort((a,b)=>b.pop-a.pop);
+    byId('shopGrid').innerHTML = list.map(cardHTML).join('');
+    byId('shopEmpty').style.display = list.length ? 'none' : 'block';
+    observeReveals();
+  }
+  document.addEventListener('click', e=>{
+    const chip = e.target.closest('[data-chip]');
+    if(chip){ currentCat = chip.dataset.chip; renderChips(); renderShop();
+      history.replaceState(null,'', currentCat==='Alles'?'shop.html':'shop.html?cat='+encodeURIComponent(currentCat)); }
+  });
+  byId('shopSearch').addEventListener('input', renderShop);
+  byId('sortSel').addEventListener('change', renderShop);
+  renderChips(); renderShop();
+</script>
+</body>
+</html>
