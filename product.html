@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product — Valoura Home</title>
+<meta name="description" content="Bekijk dit interieuraccessoire van Valoura Home.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="shop">
+<div id="header-mount"></div>
+<main>
+  <section class="section-tight">
+    <div class="wrap">
+      <div class="crumbs" id="pdpCrumbs"></div>
+      <div class="pdp" id="pdpBody"></div>
+      <div class="related">
+        <div class="section-head left"><div class="lockup left">Combineer met</div><h2 class="display-m">Mooi erbij</h2></div>
+        <div class="prod-grid" id="relatedGrid"></div>
+      </div>
+    </div>
+  </section>
+</main>
+<div id="footer-mount"></div>
+<script src="assets/data.js"></script>
+<script src="assets/partials.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  const id = +new URLSearchParams(location.search).get('id');
+  const p = prod(id);
+  if(!p){
+    byId('pdpBody').innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="serif">Product niet gevonden</div><p>Bekijk de volledige collectie.</p><br><a class="btn" href="shop.html">Naar de shop</a></div>';
+    byId('pdpCrumbs').innerHTML = '<a href="index.html">Home</a> / <a href="shop.html">Shop</a>';
+  } else {
+    let selVariant = p.vars.opts[0], selQty = 1;
+    document.title = p.name + ' — Valoura Home';
+    byId('pdpCrumbs').innerHTML = `<a href="index.html">Home</a> &nbsp;/&nbsp; <a href="shop.html?cat=${encodeURIComponent(p.cat)}">${p.cat}</a> &nbsp;/&nbsp; ${p.name}`;
+    byId('pdpBody').innerHTML = `
+      <div class="pdp-gallery">
+        <div class="pdp-main" id="pdpMain">${art(p.art)}</div>
+        <div class="pdp-thumbs">
+          <button class="t on">${art(p.art)}</button>
+          <button class="t">${art(CATS.find(c=>c.name===p.cat)?.art || p.art)}</button>
+          <button class="t">${art('schaal')}</button>
+        </div>
+      </div>
+      <div class="pdp-info">
+        <div><div class="lockup left bronze" style="margin-bottom:16px">${p.cat}</div><h1 class="display-m">${p.name}</h1></div>
+        <div class="price">${eur(p.price)} <span style="font-size:12px;color:var(--taupe);letter-spacing:.1em">&nbsp;incl. btw</span></div>
+        <p class="desc">${p.desc}</p>
+        <div class="var-block"><h5>${p.vars.label}</h5><div class="var-row" id="varRow">${p.vars.opts.map((o,i)=>`<button class="var-opt ${i===0?'on':''}" data-var="${o}">${o}</button>`).join('')}</div></div>
+        <div class="qty-cart">
+          <div class="qty"><button id="qtyMin" aria-label="Minder">−</button><input id="qtyInp" value="1" inputmode="numeric" aria-label="Aantal"><button id="qtyPlus" aria-label="Meer">+</button></div>
+          <button class="btn solid" id="pdpAdd" style="flex:1">Toevoegen aan winkelwagen</button>
+        </div>
+        <div class="pdp-usps">
+          <div><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Voor 22:00 besteld, binnen 1&ndash;3 werkdagen in huis</div>
+          <div><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Gratis verzending vanaf &euro;75</div>
+          <div><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>30 dagen bedenktijd</div>
+        </div>
+        <div class="acc">
+          <details><summary>Details &amp; materiaal</summary><div class="acc-body">Met zorg geproduceerd in Europese ateliers. Natuurlijke materialen kunnen licht afwijken in kleur en structuur &mdash; dat is precies de bedoeling.</div></details>
+          <details><summary>Verzending &amp; retour</summary><div class="acc-body">Verzending &euro;4,95, gratis vanaf &euro;75. U heeft 30 dagen bedenktijd; retourneren is eenvoudig via het formulier in uw pakket.</div></details>
+          <details><summary>Verzorging</summary><div class="acc-body">Afnemen met een droge of licht vochtige doek. Textiel wassen op 30 graden. Vermijd direct zonlicht voor de mooiste veroudering.</div></details>
+        </div>
+      </div>`;
+    byId('varRow').addEventListener('click', e=>{
+      const b = e.target.closest('[data-var]'); if(!b) return;
+      selVariant = b.dataset.var;
+      byId('varRow').querySelectorAll('.var-opt').forEach(x=>x.classList.toggle('on', x===b));
+    });
+    const inp = byId('qtyInp');
+    const setQ = v => { selQty = Math.max(1, Math.min(99, v|0 || 1)); inp.value = selQty; };
+    byId('qtyMin').onclick = ()=>setQ(selQty-1);
+    byId('qtyPlus').onclick = ()=>setQ(selQty+1);
+    inp.onchange = ()=>setQ(+inp.value);
+    byId('pdpAdd').onclick = ()=>addToCart(p.id, selVariant, selQty);
+    document.querySelectorAll('#pdpBody .pdp-thumbs .t').forEach(t=>{
+      t.onclick = ()=>{ document.querySelectorAll('#pdpBody .pdp-thumbs .t').forEach(x=>x.classList.remove('on')); t.classList.add('on'); byId('pdpMain').innerHTML = t.innerHTML; };
+    });
+    byId('relatedGrid').innerHTML = PRODUCTS.filter(x=>x.id!==p.id && x.cat===p.cat).concat(PRODUCTS.filter(x=>x.id!==p.id && x.cat!==p.cat)).slice(0,4).map(cardHTML).join('');
+    observeReveals();
+  }
+</script>
+</body>
+</html>
